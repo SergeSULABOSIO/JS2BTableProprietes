@@ -19,30 +19,27 @@ import javax.swing.ImageIcon;
  */
 public class Principale extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Principale
-     */
-    //le panel des prorpiétés
-    
-    public final ImageIcon iconedefaut = new javax.swing.ImageIcon(getClass().getResource("/IMG/Infos02.png"));
-    public JS2BPanelPropriete panProp = new JS2BPanelPropriete(iconedefaut, "New PERSONNE", true);
+    public ImageIcon iconedefaut = null;
+    public JS2BPanelPropriete panProp = null;
     private GroupeClasse Gclasse = null;
     private static String BT_TERMINER = "Terminer";
     private static String BT_ANNULER = "Annuler";
     private static String BT_QUITTER = "Quitter";
-    
 
     public Principale() {
         initComponents();
-        
-        Gclasse = new GroupeClasse(panProp, false, false, "SIGN01212450505504") {
-            
-            @Override
-            public void construire() {
-                construireTout();
-            }
-        };
-        
+        iconedefaut = new ImageIcon(getClass().getResource("/IMG/Infos02.png"));
+        panProp = new JS2BPanelPropriete(iconedefaut, "New PERSONNE", true);
+        if (panProp != null) {
+            Gclasse = new GroupeClasse(panProp, false, false, "SIGN01212450505504") {
+
+                @Override
+                public void construire() {
+                    construireTout();
+                }
+            };
+        }
+
         //Ecouteur des boutons
         ecouterPropriete();
     }
@@ -57,7 +54,7 @@ public class Principale extends javax.swing.JFrame {
         panProp.AjouterBouton((new ICONES_S2B().BTRECHERCHE_ICONE_01), BT_ANNULER);
         panProp.AjouterBouton((new ICONES_S2B().BTRECHERCHE_ICONE_01), BT_QUITTER);
     }
-    
+
     private void ecouterPropriete() {
         panProp.addProprieteListener(new ProprieteAdapter() {
 
@@ -86,13 +83,12 @@ public class Principale extends javax.swing.JFrame {
                     //System.out.println("Nom = " + event.getNom());
                     //System.out.println("Liste des propriétés :");   //+event.getListePro());
                     //for (PROPRIETE prop : event.getListePro()) {
-                        //System.out.println(" * " + prop.toString());
+                    //System.out.println(" * " + prop.toString());
                     //}
                 }
             }
         });
     }
-
 
     public void chargerData() {
         String nomPhoto = (new Date().getTime()) + "";//Photos/Capture"+nomPhoto+".jpg
@@ -100,7 +96,7 @@ public class Principale extends javax.swing.JFrame {
         CHAMP_LOCAL champ00 = new CHAMP_LOCAL(new ICONES_S2B().PISTE_ICONE_01, "Message", "msg", null, "", PROPRIETE.TYPE_SAISIE_TEXTE_MULTIPLES);
         //Photo
         //Exemple de chemin : "F:\\Projets\\S2BFEES\\Photos\\Capture1413282797604.jpg"
-        CHAMP_LOCAL champ000 = new CHAMP_LOCAL(new ICONES_S2B().PISTE_ICONE_01, "Photo", "photo", null, "F:\\Projets\\S2BFEES\\Photos\\Capture1413282797604.jpg", PROPRIETE.TYPE_PHOTO);
+        //CHAMP_LOCAL champ000 = new CHAMP_LOCAL(new ICONES_S2B().PISTE_ICONE_01, "Photo", "photo", null, "F:\\Projets\\S2BFEES\\Photos\\Capture1413282797604.jpg", PROPRIETE.TYPE_PHOTO);
         Vector villesC = new Vector();
         Vector villeSelected = new Vector();
         villesC.add("KINSHASA");
@@ -166,13 +162,11 @@ public class Principale extends javax.swing.JFrame {
         panProp.AjouterPropriete(champ07, 0);
         panProp.AjouterPropriete(champ08, 0);
         panProp.AjouterPropriete(champ00, 0);
-        panProp.AjouterPropriete(champ000, 0);
+        //panProp.AjouterPropriete(champ000, 0);
         panProp.AjouterPropriete(champ0000, 0);
         panProp.AjouterPropriete(champ0000A, 0);
         panProp.AjouterPropriete(champ0000B, 0);
     }
-
-    
 
     /**
      * This method is called from within the constructor to initialize the form.

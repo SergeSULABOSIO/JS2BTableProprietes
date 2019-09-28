@@ -5,7 +5,7 @@
  */
 package Sources.UI;
 
-import Sources.AutoCompletion.PanelTransition;
+
 import Sources.Ecouteurs.ProprieteEvent;
 import Sources.Ecouteurs.ProprieteListener;
 import Sources.EditeurTablePropriete;
@@ -36,20 +36,17 @@ public class JS2BPanelPropriete extends javax.swing.JPanel {
     public String nomTable;
     private EditeurTablePropriete ed1 = null;
     private EditeurTablePropriete ed2 = null;
-
     public PanelTransition transition = new PanelTransition();
     private JS2BPanelPropriete moi = null;
     private ImageIcon icone = null;
-
-    // un seul objet pour tous les types d' écouteurs
     private final EventListenerList listeners = new EventListenerList();
     
 
     public JS2BPanelPropriete(ImageIcon icone, String nomTable, boolean isModifier) {
         initComponents();
         this.nomTable = nomTable;
-        transition.setNomTable(this.nomTable);
-        moi = this;
+        this.transition.setNomTable(this.nomTable);
+        this.moi = this;
         this.isModifier = isModifier;
         this.icone = icone;
     }
@@ -153,7 +150,16 @@ public class JS2BPanelPropriete extends javax.swing.JPanel {
     public Vector<PROPRIETE> getListePro() {
         return listePro;
     }
-
+    
+    public PROPRIETE getPropriete(String nom) {
+        for(PROPRIETE prop: listePro){
+            if(nom.equals(prop.getNom())){
+                return prop;
+            }
+        }
+        return null;
+    }
+    
     public void setListePro(Vector<PROPRIETE> listePro) {
         this.listePro = listePro;
     }
@@ -171,12 +177,12 @@ public class JS2BPanelPropriete extends javax.swing.JPanel {
         ed1 = new EditeurTablePropriete(model.getListeProprietes(), this, isModifier);
         ed2 = new EditeurTablePropriete(model.getListeProprietes(), this, isModifier);
 
-        jTable1.getColumnModel().getColumn(0).setCellRenderer(new EditeurTablePropriete(this, isModifier));
-        jTable1.getColumnModel().getColumn(1).setCellEditor(ed1);
-        jTable1.getColumnModel().getColumn(1).setCellRenderer(ed2);
+        tableauPrincipal.getColumnModel().getColumn(0).setCellRenderer(new EditeurTablePropriete(this, isModifier));
+        tableauPrincipal.getColumnModel().getColumn(1).setCellEditor(ed1);
+        tableauPrincipal.getColumnModel().getColumn(1).setCellRenderer(ed2);
 
-        jTable1.getColumn(model.enteteValeur[0]).setPreferredWidth(150);
-        jTable1.getColumn(model.enteteValeur[1]).setPreferredWidth(300);
+        tableauPrincipal.getColumn(model.enteteValeur[0]).setPreferredWidth(150);
+        tableauPrincipal.getColumn(model.enteteValeur[1]).setPreferredWidth(300);
     }
 
     public void viderListe() {
@@ -185,8 +191,8 @@ public class JS2BPanelPropriete extends javax.swing.JPanel {
 
     public synchronized void construireTable() {
         //System.out.println("|| ** Construction de la table des Proprietes");
-        jTable1 = new JTable(model);
-        jTable1.addKeyListener(new KeyListener() {
+        tableauPrincipal = new JTable(model);
+        tableauPrincipal.addKeyListener(new KeyListener() {
 
             @Override
             public void keyTyped(KeyEvent e) {
@@ -204,8 +210,8 @@ public class JS2BPanelPropriete extends javax.swing.JPanel {
             }
         });
         chargerEditeurEtRendu();
-        jTable1.setRowHeight(25);
-        jScrollPane1.setViewportView(jTable1);
+        tableauPrincipal.setRowHeight(25);
+        jScrollPane1.setViewportView(tableauPrincipal);
         //System.out.println("|| ** FIN de la Construction de la table des Proprietes");
     }
 
@@ -219,9 +225,9 @@ public class JS2BPanelPropriete extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableauPrincipal = new javax.swing.JTable();
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableauPrincipal.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -232,7 +238,7 @@ public class JS2BPanelPropriete extends javax.swing.JPanel {
 
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tableauPrincipal);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -249,7 +255,7 @@ public class JS2BPanelPropriete extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    public javax.swing.JTable tableauPrincipal;
     // End of variables declaration//GEN-END:variables
 
     //Méthodes pour la gestion des écouteurs d'actions

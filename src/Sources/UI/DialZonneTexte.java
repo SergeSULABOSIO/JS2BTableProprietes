@@ -4,48 +4,64 @@
  * and open the template in the editor.
  */
 
-package Sources.PhotoCapture;
+package Sources.UI;
 
+import Sources.ICONES_S2B;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author user
  */
-public class DialPhoto extends javax.swing.JDialog {
+public class DialZonneTexte extends javax.swing.JDialog {
 
     /**
-     * Creates new form DialPhoto
+     * Creates new form DialZonneTexte
      */
     private Dimension ecran = Toolkit.getDefaultToolkit().getScreenSize();
     private int X = (int) ecran.getWidth() / 3;
     private int Y = (int) ecran.getHeight() / 4;
+    private int taille;
     
-    
-    public DialPhoto(java.awt.Frame parent, boolean modal) {
+    public DialZonneTexte(java.awt.Frame parent, boolean modal, int taille) {
         super(parent, modal);
         initComponents();
-        this.setBounds(X, Y, 286, 340);
+        this.setBounds(X, Y, 330, 325);
+        this.taille = taille;
+        affichertaille();
     }
     
-    public void setPhoto(String cheminImage){
-        jPhotoCapture1.setFichierImage(cheminImage);
-        jPhotoCapture1.setAfficherImage();
+    public int getTaille(){
+        return jTextPane1.getText().length();
     }
     
-    public void setActiver(boolean ok){
-        jPhotoCapture1.setActive(ok);
+    public void setTitre(String titre){
+        this.setTitle(titre);
+        this.jTabbedPane1.setTitleAt(0, "Contenue de '"+titre.toUpperCase()+"'");
     }
     
-    public String getPhoto(){
-        return jPhotoCapture1.FichierImage.getAbsolutePath();
+    public void setTexte(String texte){
+        this.jTextPane1.setText(texte);
+        affichertaille();
     }
     
+    public String getTexte(){
+        String txt = "";
+        txt = jTextPane1.getText();
+        return txt;
+    }
     
-    private void enregistrer(){
-        jPhotoCapture1.arrêter();
-        dispose();
+    private void affichertaille(){
+        if(getTaille() > taille){
+            JOptionPane.showMessageDialog(rootPane, "Désolé, vous ne pouvez pas écrire plus de "+taille+" caractères,"
+                    + "\nVeuillez synthétiser votre texte !", "Erreur", JOptionPane.ERROR_MESSAGE);
+            String texte = getTexte().substring(0, taille);
+            setTexte(texte);
+        }
+        jLabel1.setText(getTaille()+" Caractère(s).");
     }
 
     /**
@@ -57,12 +73,24 @@ public class DialPhoto extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPhotoCapture1 = new GRAPHQUE.JPhotoCapture();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane();
         jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Capture de la photo");
+        setAlwaysOnTop(true);
         setResizable(false);
+
+        jTextPane1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextPane1KeyReleased(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTextPane1);
+
+        jTabbedPane1.addTab("Texte", jScrollPane1);
 
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jButton1.setText("OK");
@@ -72,23 +100,31 @@ public class DialPhoto extends javax.swing.JDialog {
             }
         });
 
+        jLabel1.setText("Taille");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPhotoCapture1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPhotoCapture1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addGap(0, 10, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jLabel1))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -96,8 +132,13 @@ public class DialPhoto extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        enregistrer();
+        dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTextPane1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextPane1KeyReleased
+        // TODO add your handling code here:
+        affichertaille();
+    }//GEN-LAST:event_jTextPane1KeyReleased
 
     /**
      * @param args the command line arguments
@@ -116,20 +157,20 @@ public class DialPhoto extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DialPhoto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DialZonneTexte.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DialPhoto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DialZonneTexte.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DialPhoto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DialZonneTexte.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DialPhoto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DialZonneTexte.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                DialPhoto dialog = new DialPhoto(new javax.swing.JFrame(), true);
+                DialZonneTexte dialog = new DialZonneTexte(new javax.swing.JFrame(), true, 160);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -143,6 +184,10 @@ public class DialPhoto extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private GRAPHQUE.JPhotoCapture jPhotoCapture1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextPane jTextPane1;
     // End of variables declaration//GEN-END:variables
+
 }

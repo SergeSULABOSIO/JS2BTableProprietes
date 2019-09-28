@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Sources.Choixmultiple;
+package Sources.UI;
 
+import Sources.Choixmultiple.ModelChoixMultiple;
 import Sources.ICONES_S2B;
 import java.awt.Component;
 import java.awt.Dimension;

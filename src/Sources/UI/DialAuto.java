@@ -4,8 +4,10 @@
  * and open the template in the editor.
  */
 
-package Sources.AutoCompletion;
+package Sources.UI;
 
+import Sources.AutoCompletion.AutocompleteJComboBox;
+import Sources.AutoCompletion.StringSearchable;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,12 +1,16 @@
+package Sources;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Sources;
+
 
 import OBJET.CLASSE;
-import OBJET.COURS;
+import Sources.CHAMP_LOCAL;
+import Sources.ICONES_S2B;
+import Sources.PROPRIETE;
 import Sources.UI.JS2BPanelPropriete;
 import java.util.Date;
 import java.util.Vector;

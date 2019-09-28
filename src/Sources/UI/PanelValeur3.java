@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package Sources.Choixmultiple;
+package Sources.UI;
 
 import Sources.*;
 import java.awt.Color;

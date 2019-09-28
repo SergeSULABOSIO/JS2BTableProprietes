@@ -25,7 +25,7 @@ public class PROPRIETE {
     public static final int TYPE_CHOIX_DATE = 4;
     public static final int TYPE_OBJET = 5;
     public static final int TYPE_SAISIE_TEXTE_MULTIPLES = 6;
-    public static final int TYPE_PHOTO = 7;
+    //public static final int TYPE_PHOTO = 7;
     public static final int TYPE_CHOIX_LISTE_MULTIPLE = 8;
     public static final int TYPE_CHOIX_LISTE_MULTIPLE_ALPHA_NUMERIQUE = 9;
     public static final int TYPE_CHOIX_LISTE_MULTIPLE_DATE = 10;
@@ -100,6 +100,7 @@ public class PROPRIETE {
 
     public void setValeurSelectionne(Object valeurSelectionne) {
         this.valeurSelectionne = valeurSelectionne;
+        
     }
 
     public int getType() {
@@ -122,3 +123,4 @@ public class PROPRIETE {
     }
     
 }
+

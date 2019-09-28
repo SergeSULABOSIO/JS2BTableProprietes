@@ -5,6 +5,8 @@
  */
 package Sources.AutoCompletion;
 
+import Sources.UI.DialAuto;
+import Sources.UI.PanelCombo;
 import java.awt.Component;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;

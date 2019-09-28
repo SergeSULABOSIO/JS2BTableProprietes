@@ -22,6 +22,7 @@ public class PanelCombo extends javax.swing.JPanel {
     }
 
     public void sentirSelection(boolean isSelected, int row) {
+        //System.out.println("Combo selected: " + isSelected);
         if (isSelected == true) {
             this.setCouleurs(Color.BLACK, Color.YELLOW);
         } else {

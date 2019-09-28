@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Sources.AutoCompletion;
+package Sources.UI;
 
+import Sources.AutoCompletion.AutocompleteJComboBox;
 import Sources.PROPRIETE;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -120,6 +121,6 @@ public class PanelAuto extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    public javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

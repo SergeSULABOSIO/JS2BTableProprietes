@@ -5,21 +5,21 @@
  */
 package Sources;
 
+
 import Sources.AutoCompletion.AutocompleteJComboBox;
-import Sources.AutoCompletion.PanelAuto;
+import Sources.UI.PanelAuto;
 import Sources.AutoCompletion.StringSearchable;
-import Sources.Choixmultiple.DialChoixMultiple;
-import Sources.PhotoCapture.DialPhoto;
-import Sources.TextArea.DialZonneTexte;
+import Sources.UI.DialChoixMultiple;
+import Sources.UI.DialZonneTexte;
 import Sources.UI.JS2BPanelPropriete;
 import UI.JS2bTextField;
 import com.toedter.calendar.JDateChooser;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,67 +42,47 @@ import javax.swing.table.TableCellRenderer;
  *
  * @author Gateway
  */
-public class EditeurTablePropriete extends AbstractCellEditor implements TableCellEditor, TableCellRenderer {//KeyListener, PropertyChangeListener, 
+public class EditeurTablePropriete extends AbstractCellEditor implements TableCellEditor, TableCellRenderer {
 
     private int tailleExemplaire = 15;
-    private Dimension ecran = Toolkit.getDefaultToolkit().getScreenSize();
-    //LISTE DES CHAMPS ACONSTRUIRE DYNAMIQUEMENT
     private Vector<PROPRIETE> listePro;
-
-    //lES OBJETS D'EDITION
-    //Sélecteur des dates
-    private JDateChooser champDate = null;//new JDateChooser(new Date());
-    //Champ de saisie texte ligne unique
+    private JDateChooser champDate = null;
     private JS2bTextField chamTexte = new JS2bTextField();
-    //Champ de mot de passe
     private JPasswordField champMotDePasse = new JPasswordField();
-    //Champ de saisie texte lignes multiples
-    private DialZonneTexte champTexteMutiple = null;//new DialZonneTexte(null, true);
-    //Liste des choix unique d'élements simples
-    private JComboBox listeChoix = null;//new JComboBox();
-    //Liste des choix unique d'élements long
-    private AutocompleteJComboBox listeChoixAuto = null;//new AutocompleteJComboBox();
-    private PanelAuto panAuto = null;//new PanelAuto(listeChoixAuto);
-    //Liste des choix multiples d'élements court ou long
-    private DialChoixMultiple listeChoixMultiple = null;//new DialChoixMultiple(null, true, DialChoixMultiple.MODE_CHOIX);
-    //Liste des choix multiples d'élements court ou long - AN
-    private DialChoixMultiple listeChoixMultiple_AN = null;//new DialChoixMultiple(null, true, DialChoixMultiple.MODE_AJOUT_AN);
-    //Liste des choix multiples d'élements court ou long - DATE
-    private DialChoixMultiple listeChoixMultiple_DATE = null;//new DialChoixMultiple(null, true, DialChoixMultiple.MODE_AJOUT_DATES);
-    //Prenneur des photos
-    private DialPhoto champPhoto = null;
-
-    //LES OBJETS DES RENDUS
-    //Le panel qui affiche le nom de la propriété
-    private PanelPropriete panPro = null;//new PanelPropriete();
-    //Le panel qui affiche la valeur de la propriété
+    private DialZonneTexte champTexteMutiple = null;
+    private JComboBox listeChoix = null;
+    private AutocompleteJComboBox listeChoixAuto = null;
+    private PanelAuto panAuto = null;
+    private DialChoixMultiple listeChoixMultiple = null;
+    private DialChoixMultiple listeChoixMultiple_AN = null;
+    private DialChoixMultiple listeChoixMultiple_DATE = null;
+    private PanelPropriete panPro = null;
     private PanelValeur panVal = new PanelValeur();
     private PanelSeparateur panSep = new PanelSeparateur();
-    //Le bouton actualiser
     private JButton boutonActualiser = new JButton("Actualiser");
-
-    private boolean modifie = false;    //Cette variable empêche le programme d'actualiser les liste plusieurs fois en un seul clic
-
+    private boolean modifie = false;
     private int ligneModifiee = -1;
     private static int serial = 0;
-
     public static EditeurTablePropriete moi = null;
-
     private JS2BPanelPropriete js2bPanel;
     private PanelCombo panCombo = new PanelCombo();
-    private boolean isModifier = false;
+    
+    public static Color COULEUR_BLEU = new Color(26, 45, 77);       //Pour plus d'infos visiter le lien https://www.colorhexa.com/1a2e4d
+    public static Color COULEUR_BLEU_CLAIRE_1 = new Color(68,117,192);    //Une variante claire
+    public static Color COULEUR_BLEU_CLAIRE_2 = new Color(141,171,217);    //Une variante claire
+    public static Color COULEUR_ORANGE = new Color(251, 155, 12);   //Pour plus d'information, visiter le lien https://www.colorhexa.com/fb9b0c
+    public static Color COULEUR_ROUGE = new Color(251,36,12);       //Une variante  
+    
 
     public EditeurTablePropriete(JS2BPanelPropriete js2bPanel, boolean isModifier) {
         setViderListeChoixMultiple();
         setViderListeChoixMultipleAN();
         setViderListeChoixMultipleDATE();
-
         this.js2bPanel = js2bPanel;
         listePro = new Vector<PROPRIETE>();
 
         initiliserBouton();
         moi = this;
-        this.isModifier = isModifier;
     }
 
     private void setViderListeChoixMultiple() {
@@ -184,8 +164,6 @@ public class EditeurTablePropriete extends AbstractCellEditor implements TableCe
                 return champTexteMutiple.getTexte();
             } else if (proEncours.getType() == PROPRIETE.TYPE_BOUTON_ACTUALISER) {
                 return boutonActualiser.getText();
-            } else if (proEncours.getType() == PROPRIETE.TYPE_PHOTO) {
-                return champPhoto.getPhoto();
             } else if (proEncours.getType() == PROPRIETE.TYPE_SAISIE_NUMBRE) {
                 return chamTexte.getText();
             } else if (proEncours.getType() == PROPRIETE.TYPE_CHOIX_LISTE_MULTIPLE) {
@@ -234,8 +212,6 @@ public class EditeurTablePropriete extends AbstractCellEditor implements TableCe
                 return editerJS2BtexteField(row, value, proEncours);
             case PROPRIETE.TYPE_SAISIE_TEXTE_MULTIPLES:
                 return editerZonneTexte(row, value, proEncours);
-            case PROPRIETE.TYPE_PHOTO:
-                return editerPhoto(row, value, proEncours);
             case PROPRIETE.TYPE_SAISIE_NUMBRE:
                 return editerJS2BtexteField(row, value, proEncours);
             case PROPRIETE.TYPE_CHOIX_DATE:
@@ -351,27 +327,7 @@ public class EditeurTablePropriete extends AbstractCellEditor implements TableCe
         return panVal;
     }
 
-    private PanelValeur editerPhoto(final int row, final Object value, final PROPRIETE proEncours) {
-        Thread th = new Thread() {
-
-            @Override
-            public void run() {
-                ligneModifiee = row;
-                panVal.setNom("Edition ...");
-                if ((proEncours.getValeurSelectionne() + "").length() == 0) {
-                    String d = (new Date().getTime()) + "";
-                    proEncours.setValeurSelectionne("Photos/Capture" + d + ".jpg");
-                }
-                champPhoto = new DialPhoto(null, true);
-                champPhoto.setActiver(!isModifier);
-                champPhoto.setPhoto(proEncours.getValeurSelectionne() + "");
-                champPhoto.show();
-                panVal.setNom(getTexteCourt(champPhoto.getPhoto()));
-            }
-        };
-        th.start();
-        return panVal;
-    }
+    
 
     private JS2bTextField editerJS2BtexteField(final int row, final Object value, final PROPRIETE proEncours) {
         Thread th = new Thread() {
@@ -425,6 +381,15 @@ public class EditeurTablePropriete extends AbstractCellEditor implements TableCe
         if (listeChoix == null) {
             listeChoix = new JComboBox();
         }
+        
+        listeChoix.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //System.out.println("Clic: " + e.getActionCommand());
+                fireEditingStopped();
+            }
+        });
+        
         setRendu(proEncours.getIcone());
         listeChoix.removeAllItems();
         for (Object o : proEncours.getValeurs()) {
@@ -435,10 +400,7 @@ public class EditeurTablePropriete extends AbstractCellEditor implements TableCe
         return listeChoix;
     }
 
-    private void gererSelectionPanelObjetAuto(PanelAuto pan) {
-        pan.setCouleurs(Color.BLACK, Color.YELLOW);
-    }
-
+    
     private PanelAuto editerJComboBoxAuto(int row, Object value, final PROPRIETE proEncours, boolean isSelected) {
         ligneModifiee = row;
         try {
@@ -459,7 +421,6 @@ public class EditeurTablePropriete extends AbstractCellEditor implements TableCe
             panAuto.setImage(proEncours.getIcone());
             panAuto.setDialogueEtListe(myWords, proEncours);
 
-            gererSelectionPanelObjetAuto(panAuto);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -479,6 +440,16 @@ public class EditeurTablePropriete extends AbstractCellEditor implements TableCe
         } else {
             champDate.setDate(new Date());
         }
+        
+        this.champDate.getDateEditor().addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent e) {
+                fireEditingStopped();
+            }
+        });
+        
+        
+        
         fireEditingStopped();
         return champDate;
     }
@@ -541,9 +512,6 @@ public class EditeurTablePropriete extends AbstractCellEditor implements TableCe
                     return panVal;
                 case PROPRIETE.TYPE_OBJET:
                     afficherComboBox(proEncours, isSelected, row, value);
-                    return panVal;
-                case PROPRIETE.TYPE_PHOTO:
-                    afficherValeurTexte(proEncours, isSelected, row, value);
                     return panVal;
                 default:
                     afficherSeparateur(proEncours.getNom().replaceFirst(PROPRIETE.Prefixe_SP, ""));
@@ -634,30 +602,32 @@ public class EditeurTablePropriete extends AbstractCellEditor implements TableCe
 
     private void gererSelectionPanelProp(boolean isSelected, int row, PanelPropriete pan) {
         if (isSelected == true) {
-            pan.setCouleurs(Color.BLACK, Color.YELLOW);
+            //pan.setCouleurs(couleurBasique.getCouleur_background_selection(), couleurBasique.getCouleur_encadrement_selection());
+            pan.setCouleurs(COULEUR_BLEU, COULEUR_ORANGE);
         } else {
             if ((row % 2) == 0) {
-                pan.setCouleurs(new Color(220, 220, 220), Color.BLACK);
+                pan.setCouleurs(new Color(220, 220, 220), COULEUR_BLEU);//Color.BLACK
             } else {
-                pan.setCouleurs(Color.WHITE, Color.black);//Activer uniquement cette ligne afin que les elements de la liste ne s'affichent qu'en blanc
+                pan.setCouleurs(Color.WHITE, COULEUR_BLEU);//Activer uniquement cette ligne afin que les elements de la liste ne s'affichent qu'en blanc
             }
         }
     }
 
     private void gererSelectionPanelVal(boolean isSelected, int row, PanelValeur pan) {
         if (isSelected == true) {
-            pan.setCouleurs(Color.BLACK, Color.YELLOW);
+            //pan.setCouleurs(couleurBasique.getCouleur_background_selection(), couleurBasique.getCouleur_encadrement_selection());
+            pan.setCouleurs(COULEUR_BLEU, COULEUR_ORANGE);
         } else {
             if ((row % 2) == 0) {
-                pan.setCouleurs(new Color(220, 220, 220), Color.BLUE);
+                pan.setCouleurs(new Color(220, 220, 220), COULEUR_BLEU);
             } else {
-                pan.setCouleurs(Color.WHITE, Color.BLUE);//Activer uniquement cette ligne afin que les elements de la liste ne s'affichent qu'en blanc
+                pan.setCouleurs(Color.WHITE, COULEUR_BLEU);//Activer uniquement cette ligne afin que les elements de la liste ne s'affichent qu'en blanc
             }
         }
     }
     
     private void gererSelectionPanelVal(PanelSeparateur pan) {
-        pan.setCouleurs(Color.DARK_GRAY, Color.YELLOW);
+        pan.setCouleurs(COULEUR_BLEU, COULEUR_ORANGE);//Color.DARK_GRAY, Color.YELLOW
     }
 
     public static void stopperEdition() {
@@ -665,3 +635,16 @@ public class EditeurTablePropriete extends AbstractCellEditor implements TableCe
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
