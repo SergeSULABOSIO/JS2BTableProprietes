@@ -21,7 +21,7 @@ public class TestAuto extends javax.swing.JFrame {
 
     public TestAuto() {
         initComponents();
-
+        //Dettee
     }
 
     
